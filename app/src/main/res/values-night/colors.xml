@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Almost black background (i.e. secondary; to complement default black background) -->
+    <color name="backgroundDefaultColor">#424242</color>
+</resources>
