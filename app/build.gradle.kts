@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.mintedtech.timerdemomd3"
+    namespace = "com.mintedtech.trasck"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mintedtech.timerdemomd3"
+        applicationId = "com.mintedtech.trasck"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

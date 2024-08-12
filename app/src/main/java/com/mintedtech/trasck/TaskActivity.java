@@ -1,4 +1,4 @@
-package com.mintedtech.timerdemomd3;
+package com.mintedtech.trasck;
 
 import android.os.Bundle;
 
@@ -16,7 +16,7 @@ import android.view.View;
 
 
 
-import com.mintedtech.timerdemomd3.databinding.ActivityTaskBinding;
+import com.mintedtech.trasck.databinding.ActivityTaskBinding;
 
 import java.util.Locale;
 
