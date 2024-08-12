@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TimerDemoMD3"
+rootProject.name = "Trasck"
 include(":app")
  

@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="AppTheme" parent="Theme.Material3.Dark">
         <!-- Transparent system bars for edge-to-edge. -->
         <item name="android:navigationBarColor">@android:color/transparent</item>
@@ -32,5 +32,10 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>
