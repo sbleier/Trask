@@ -1,21 +1,13 @@
-package com.mintedtech.timerdemomd3;
+package com.mintedtech.trasck;
 
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Handler;
-import android.os.Looper;
+import com.mintedtech.trasck.databinding.ActivityMainBinding;
 
-import androidx.core.content.ContextCompat;
-
-import com.mintedtech.timerdemomd3.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.util.Locale;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,12 +19,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView();
         setSupportActionBar(binding.toolbar);
+        binding.fab.setOnClickListener(view -> handleFABClick(view));
+
 
     }
 
     private void setContentView() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+    }
+
+    private void handleFABClick(View view) {
+        Intent intent = new Intent(
+                MainActivity.this, TaskActivity.class);
+        startActivity(intent);
+
     }
 
 }

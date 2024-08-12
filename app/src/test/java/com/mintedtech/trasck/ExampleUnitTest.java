@@ -1,4 +1,4 @@
-package com.mintedtech.timerdemomd3;
+package com.mintedtech.trasck;
 
 import org.junit.Test;
 
