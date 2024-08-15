@@ -1,6 +1,7 @@
 package com.mintedtech.trasck;
 
-import android.content.Intent;
+import static androidx.core.util.TimeUtils.formatDuration;
+
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -12,12 +13,15 @@ import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
 import android.os.Looper;
+
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mintedtech.trasck.databinding.ActivityTaskBinding;
 
 import java.util.Locale;
@@ -31,6 +35,8 @@ public class TaskActivity extends AppCompatActivity {
 
     private boolean mTimerPaused;
     private long mSecondsElapsed;
+    private long estimatedTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +48,16 @@ public class TaskActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         setupBackArrow();
 
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
+        binding.fab.setOnClickListener(view -> {
+            getTimeFromInput();
+            pauseResumeTimer(); // Timer action here
         });
-        binding.fab.setOnClickListener(view -> pauseResumeTimer());
         setupTimer();
         pauseAndResetTimerOnInitialRun(savedInstanceState);
 
+        getTimeFromInput();
+        updateTextView();
     }
-
 
     private void setupBackArrow() {
         FloatingActionButton backArrow = findViewById(R.id.backArrow);
@@ -83,9 +84,46 @@ public class TaskActivity extends AppCompatActivity {
         updateTextView();
     }
 
+    private void getTimeFromInput() {
+        TextInputEditText estimatedTimeInput = findViewById(R.id.estimated_time_input);
+        String timeInput = estimatedTimeInput.getText().toString();
+
+        // Expected format: HH:MM:SS
+        String[] timeParts = timeInput.split(":");
+        if (timeParts.length == 3) {
+            int hours = Integer.parseInt(timeParts[0]);
+            int minutes = Integer.parseInt(timeParts[1]);
+            int seconds = Integer.parseInt(timeParts[2]);
+
+            // Convert the provided time to total seconds
+            estimatedTime = hours * 3600 + minutes * 60 + seconds;
+        }
+
+    }
+
     private void updateTextView() {
-        binding.contentTask.tvSecondsElapsed.setText
-                (String.format(Locale.US, "%d", mSecondsElapsed));
+        binding.contentTask.tvSecondsElapsed.setText(formatDuration(mSecondsElapsed));
+
+        long remainingTime = estimatedTime - mSecondsElapsed;
+
+
+        long hours = remainingTime / 3600;
+        long minutes = (remainingTime % 3600) / 60;
+        long seconds = remainingTime % 60;
+
+        if (remainingTime >= 0) {
+            String formattedTime = String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+            binding.contentTask.tvRemainingTime.setText("Time remaining until your goal: " + formattedTime);
+        } else {
+            binding.contentTask.tvRemainingTime.setText("You've reached your goal!");
+        }
+    }
+
+    private String formatDuration(long seconds) {
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, secs);
     }
 
 
@@ -112,6 +150,15 @@ public class TaskActivity extends AppCompatActivity {
 
         mHandler.removeCallbacks(mRunnable);
         mTimerPaused = true;
+
+        long remainingTime = estimatedTime - mSecondsElapsed;
+
+        // Convert remaining time from seconds to hours, minutes, seconds
+        long hours = remainingTime / 3600;
+        long minutes = (remainingTime % 3600) / 60;
+        long seconds = remainingTime % 60;
+
+
     }
 
     @Override
@@ -170,6 +217,8 @@ public class TaskActivity extends AppCompatActivity {
 
         // get saved timer status
         mTimerPaused = savedInstanceState.getBoolean("TIMER_PAUSED");
+        estimatedTime = savedInstanceState.getLong("ESTIMATED_TIME");
+
         // onResume(), called later in the Activity Lifecycle,
         // will resume the timer if it was not paused
     }
@@ -179,6 +228,7 @@ public class TaskActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putLong("SECONDS_ELAPSED", mSecondsElapsed);
         outState.putBoolean("TIMER_PAUSED", mTimerPaused);
+        outState.putLong("ESTIMATED_TIME", estimatedTime);
     }
 
 }
