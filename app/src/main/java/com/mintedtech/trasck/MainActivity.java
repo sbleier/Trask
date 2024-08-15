@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fab.setOnClickListener(view -> handleFABClick(view));
 
+
         addDummyTasks();
 
 
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void addDummyTasks() {
         // Adding dummy tasks for demonstration
-        taskList.add(new Task("Task 1", "Description for Task 1"));
-        taskList.add(new Task("Task 2", "Description for Task 2"));
+        taskList.add(new Task("Task 1", "Description for Task 1", 3));
+        taskList.add(new Task("Task 2", "Description for Task 2", 3));
         adapter.notifyDataSetChanged();
     }
 
