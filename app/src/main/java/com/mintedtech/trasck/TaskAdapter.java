@@ -15,11 +15,13 @@ import java.util.List;
 
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-    private ArrayList<Task> taskList;
+
+
 
     private Context context;
+    private List<Task> taskList;
 
-    public TaskAdapter(Context context, ArrayList<Task> tasks) {
+    public TaskAdapter(Context context, List<Task> tasks) {
         this.context = context;
         this.taskList = tasks;
     }

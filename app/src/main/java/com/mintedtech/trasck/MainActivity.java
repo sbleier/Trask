@@ -35,35 +35,69 @@ public class MainActivity extends AppCompatActivity {
         // Set up the RecyclerView
         recyclerView = findViewById(R.id.taskRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TaskAdapter(this, (ArrayList<Task>) taskList);
+        adapter = new TaskAdapter(this, taskList);
         recyclerView.setAdapter(adapter);
 
-        binding.fab.setOnClickListener(view -> handleFABClick(view));
+//        binding.fab.setOnClickListener(view -> handleFABClick(view));
+
+        binding.fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, TaskActivity.class);
+            startActivityForResult(intent, 1);
+        });
 
 
-        addDummyTasks();
+//        addDummyTasks();
 
 
     }
 
-    private void addDummyTasks() {
-        // Adding dummy tasks for demonstration
-        taskList.add(new Task("Task 1", "Description for Task 1", 3));
-        taskList.add(new Task("Task 2", "Description for Task 2", 3));
-        adapter.notifyDataSetChanged();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Retrieve the task data from the intent
+            String taskTitle = data.getStringExtra("taskTitle");
+            String taskDescription = data.getStringExtra("taskDescription");
+            long estimatedTime = convertTimeToSeconds(data.getStringExtra("estimatedTime"));
+
+            // Create a new Task object and add it to the list
+            Task newTask = new Task(taskTitle, taskDescription, estimatedTime);
+            taskList.add(newTask);
+
+            // Notify the adapter that the data has changed
+            adapter.notifyDataSetChanged();
+        }
     }
+
+    private long convertTimeToSeconds(String timeInput) {
+        // Expected format: HH:MM:SS
+        String[] timeParts = timeInput.split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        int seconds = Integer.parseInt(timeParts[2]);
+
+        // Convert the provided time to total seconds
+        return hours * 3600 + minutes * 60 + seconds;
+    }
+
+//    private void addDummyTasks() {
+//        // Adding dummy tasks for demonstration
+//        taskList.add(new Task("Task 1", "Description for Task 1", 3));
+//        taskList.add(new Task("Task 2", "Description for Task 2", 3));
+//        adapter.notifyDataSetChanged();
+//    }
 
     private void setContentView() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 
-    private void handleFABClick(View view) {
-        Intent intent = new Intent(
-                MainActivity.this, TaskActivity.class);
-        startActivity(intent);
-
-    }
+//    private void handleFABClick(View view) {
+//        Intent intent = new Intent(
+//                MainActivity.this, TaskActivity.class);
+//        startActivity(intent);
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

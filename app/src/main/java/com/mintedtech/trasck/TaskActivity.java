@@ -2,6 +2,7 @@ package com.mintedtech.trasck;
 
 import static androidx.core.util.TimeUtils.formatDuration;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -57,6 +59,24 @@ public class TaskActivity extends AppCompatActivity {
 
         getTimeFromInput();
         updateTextView();
+
+        Button submitTaskButton = findViewById(R.id.submitTaskButton);
+        submitTaskButton.setOnClickListener(view -> submitTask());
+    }
+
+    private void submitTask() {
+        // Retrieve input values
+        String taskTitle = ((TextInputEditText) findViewById(R.id.taskInput)).getText().toString();
+        String taskDescription = ((TextInputEditText) findViewById(R.id.taskDescription)).getText().toString();
+        String estimatedTime = ((TextInputEditText) findViewById(R.id.estimated_time_input)).getText().toString();
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("taskTitle", taskTitle);
+        resultIntent.putExtra("taskDescription", taskDescription);
+        resultIntent.putExtra("estimatedTime", estimatedTime);
+
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
     private void setupBackArrow() {
