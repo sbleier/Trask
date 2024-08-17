@@ -18,7 +18,7 @@
         android:textAppearance="?attr/textAppearanceListItemSecondary" />
 
     <TextView
-        android:id="@+id/taskTime"
+        android:id="@+id/estimatedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItemSecondary" />
