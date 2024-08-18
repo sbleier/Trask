@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mintedtech.trasck.databinding.ActivityMainBinding;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +32,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView();
         setSupportActionBar(binding.toolbar);
         // Initialize the task list
-        taskList = new ArrayList<>();
+        taskList = new ArrayList<Task>();
 
         // Set up the RecyclerView
         recyclerView = findViewById(R.id.taskRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TaskAdapter(this, taskList);
+        adapter = new TaskAdapter(this);
         recyclerView.setAdapter(adapter);
 
 //        binding.fab.setOnClickListener(view -> handleFABClick(view));
 
         binding.fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, TaskActivity.class);
+            Intent intent = new Intent(this, TaskActivity.class);
             startActivityForResult(intent, 1);
         });
 
@@ -54,30 +56,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             // Retrieve the task data from the intent
-            String taskTitle = data.getStringExtra("taskTitle");
-            String taskDescription = data.getStringExtra("taskDescription");
-            long estimatedTime = convertTimeToSeconds(data.getStringExtra("estimatedTime"));
+            Task newTask = (Task) data.getParcelableExtra("new_task");
+            if (newTask != null) {
+                taskList.add(newTask);
+                adapter.submitList(taskList); // Notify adapter of new data
+            }
 
-            // Create a new Task object and add it to the list
-            Task newTask = new Task(taskTitle, taskDescription, estimatedTime);
-            taskList.add(newTask);
-
-            // Notify the adapter that the data has changed
-            adapter.notifyDataSetChanged();
         }
     }
 
     private long convertTimeToSeconds(String timeInput) {
         // Expected format: HH:MM:SS
-        String[] timeParts = timeInput.split(":");
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
-        int seconds = Integer.parseInt(timeParts[2]);
+        if (timeInput == null || timeInput.isEmpty()) {
+            return 0; // Or handle empty input differently
+        }
 
-        // Convert the provided time to total seconds
-        return hours * 3600 + minutes * 60 + seconds;
+        String[] timeParts = timeInput.split(":");
+        if (timeParts.length == 3) {
+            try {
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                int seconds = Integer.parseInt(timeParts[2]);
+                return hours * 3600 + minutes * 60 + seconds;
+            } catch (NumberFormatException e) {
+                // Handle invalid number format
+                return 0; // Or handle differently
+            }
+        } else {
+            // Handle invalid time format
+            return 0; // Or handle differently
+        }
     }
 
 //    private void addDummyTasks() {

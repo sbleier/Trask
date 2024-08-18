@@ -47,6 +47,7 @@ public class TaskActivity extends AppCompatActivity {
         binding = ActivityTaskBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         setSupportActionBar(binding.toolbar);
         setupBackArrow();
 
@@ -66,18 +67,48 @@ public class TaskActivity extends AppCompatActivity {
 
     private void submitTask() {
         // Retrieve input values
-        String taskTitle = ((TextInputEditText) findViewById(R.id.taskInput)).getText().toString();
-        String taskDescription = ((TextInputEditText) findViewById(R.id.taskDescription)).getText().toString();
-        String estimatedTime = ((TextInputEditText) findViewById(R.id.estimated_time_input)).getText().toString();
+        try {
 
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("taskTitle", taskTitle);
-        resultIntent.putExtra("taskDescription", taskDescription);
-        resultIntent.putExtra("estimatedTime", estimatedTime);
 
-        setResult(RESULT_OK, resultIntent);
-        finish();
+            TextInputEditText taskTitleInput = findViewById(R.id.taskTitle);
+            String taskTitle = taskTitleInput.getText().toString();
+
+            TextInputEditText taskDescriptionInput = findViewById(R.id.taskDescription);
+            String taskDescription = taskDescriptionInput.getText().toString();
+
+            TextInputEditText estimatedTimeInput = findViewById(R.id.estimatedTime);
+            String estTimeStr = estimatedTimeInput.getText().toString();
+
+            long estTime = parseEstimatedTime(estTimeStr);
+
+            Task newTask = new Task(taskTitle, taskDescription, estTime);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("new_task", newTask);
+            setResult(RESULT_OK, resultIntent);
+            finish();// Convert time string to seconds
+        }catch(NullPointerException e){
+            e.getMessage();
+        }
+
+
     }
+
+    private long parseEstimatedTime(String timeInput) {
+        // Expected format: HH:MM:SS
+        String[] timeParts = timeInput.split(":");
+        if (timeParts.length == 3) {
+            try {
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                int seconds = Integer.parseInt(timeParts[2]);
+                return hours * 3600 + minutes * 60 + seconds;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0; // Default to 0 if parsing fails
+    }
+
 
     private void setupBackArrow() {
         FloatingActionButton backArrow = findViewById(R.id.backArrow);
@@ -105,7 +136,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void getTimeFromInput() {
-        TextInputEditText estimatedTimeInput = findViewById(R.id.estimated_time_input);
+        TextInputEditText estimatedTimeInput = findViewById(R.id.estimatedTime);
         String timeInput = estimatedTimeInput.getText().toString();
 
         // Expected format: HH:MM:SS
@@ -170,13 +201,6 @@ public class TaskActivity extends AppCompatActivity {
 
         mHandler.removeCallbacks(mRunnable);
         mTimerPaused = true;
-
-        long remainingTime = estimatedTime - mSecondsElapsed;
-
-        // Convert remaining time from seconds to hours, minutes, seconds
-        long hours = remainingTime / 3600;
-        long minutes = (remainingTime % 3600) / 60;
-        long seconds = remainingTime % 60;
 
 
     }
