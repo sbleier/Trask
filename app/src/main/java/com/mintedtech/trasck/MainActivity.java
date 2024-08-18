@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TaskAdapter adapter;
-    private ArrayList<Task> taskList;
+    private List<Task> taskList;
     private ActivityMainBinding binding;
 
     @Override
