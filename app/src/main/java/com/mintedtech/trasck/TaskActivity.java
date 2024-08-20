@@ -1,12 +1,9 @@
 package com.mintedtech.trasck;
 
-import static androidx.core.util.TimeUtils.formatDuration;
-
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,15 +12,11 @@ import androidx.core.content.ContextCompat;
 import android.os.Handler;
 import android.os.Looper;
 
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.mintedtech.trasck.databinding.ActivityTaskBinding;
 
 import java.util.Locale;
@@ -38,7 +31,8 @@ public class TaskActivity extends AppCompatActivity {
     private boolean mTimerPaused;
     private long mSecondsElapsed;
     private long estimatedTime;
-
+    private boolean isEditMode;
+    private int editPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,37 +57,56 @@ public class TaskActivity extends AppCompatActivity {
 
         Button submitTaskButton = findViewById(R.id.submitTaskButton);
         submitTaskButton.setOnClickListener(view -> submitTask());
+
+        Intent incomingData = getIntent();
+        editPosition = incomingData.getIntExtra("edit_task_position", -1);
+        isEditMode = editPosition >-1;
+
+        if (isEditMode) {
+            Task currentTask = incomingData.getParcelableExtra("current_task");
+            binding.contentTask.taskTitle.setText(currentTask.getTitle().toString());
+            binding.contentTask.taskDescription.setText(currentTask.getDescription().toString());
+            //TODO: Adjust number formats for these two items following
+            binding.contentTask.estimatedTime.setText(Long.toString(currentTask.getEstimatedTime()));
+            binding.contentTask.tvSecondsElapsed.setText(Long.toString(currentTask.getElapsedTime()));
+
+        }
+
     }
 
     private void submitTask() {
         // Retrieve input values
         try {
-
-
-            TextInputEditText taskTitleInput = findViewById(R.id.taskTitle);
+            TextInputEditText taskTitleInput =  binding.contentTask.taskTitle;
             String taskTitle = taskTitleInput.getText().toString();
 
-            TextInputEditText taskDescriptionInput = findViewById(R.id.taskDescription);
+            TextInputEditText taskDescriptionInput = binding.contentTask.taskDescription;
             String taskDescription = taskDescriptionInput.getText().toString();
 
-            TextInputEditText estimatedTimeInput = findViewById(R.id.estimatedTime);
+            TextInputEditText estimatedTimeInput = binding.contentTask.estimatedTime;
             String estTimeStr = estimatedTimeInput.getText().toString();
 
-            long estTime = parseEstimatedTime(estTimeStr);
+            long estTime = parseTimeFromString(estTimeStr);
 
-            Task newTask = new Task(taskTitle, taskDescription, estTime);
+            String ellapsedTimeString = binding.contentTask.tvSecondsElapsed.getText().toString();
+
+            long elapsedTime = parseTimeFromString(ellapsedTimeString); //TODO
+
+            Task newTask = new Task(taskTitle, taskDescription, estTime, elapsedTime);
             Intent resultIntent = new Intent();
             resultIntent.putExtra("new_task", newTask);
+            resultIntent.putExtra("edit_position", editPosition);
             setResult(RESULT_OK, resultIntent);
             finish();// Convert time string to seconds
-        }catch(NullPointerException e){
+
+        } catch (NullPointerException e) {
             e.getMessage();
         }
 
 
     }
 
-    private long parseEstimatedTime(String timeInput) {
+    private long parseTimeFromString(String timeInput) {
         // Expected format: HH:MM:SS
         String[] timeParts = timeInput.split(":");
         if (timeParts.length == 3) {
@@ -244,7 +257,7 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            finish();
             return true;
         } else
             return super.onOptionsItemSelected(item);

@@ -3,21 +3,26 @@ package com.mintedtech.trasck;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 public class Task implements Parcelable {
     private String title;
     private String description;
-    private long time;
+    private long estimatedTime;
+    private long elapsedTime;
 
-    public Task(String title, String description, long time) {
+    public Task(String title, String description, long estimatedTime, long elapsedTime) {
         this.title = title;
         this.description = description;
-        this.time = time;
+        this.estimatedTime = estimatedTime;
+        this.elapsedTime = elapsedTime;
     }
 
     protected Task(Parcel in) {
         title = in.readString();
         description = in.readString();
-        time = in.readLong();
+        estimatedTime = in.readLong();
+        elapsedTime = in.readLong();
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -41,9 +46,25 @@ public class Task implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(title);
         parcel.writeString(description);
-        parcel.writeLong(time);
+        parcel.writeLong(estimatedTime);
+        parcel.writeLong(elapsedTime);
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setEstimatedTime(long estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
+    public void setElapsedTime(long elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
 
     public String getTitle() {
         return title;
@@ -53,20 +74,35 @@ public class Task implements Parcelable {
         return description;
     }
 
-    public long getTime() {
-        return time;
+    public long getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public long getElapsedTime() {
+        return elapsedTime;
     }
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return time == task.time &&
-                title.equals(task.title) &&
-                description.equals(task.description);
+        return estimatedTime == task.estimatedTime && elapsedTime == task.elapsedTime && Objects.equals(title, task.title) && Objects.equals(description, task.description);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, estimatedTime, elapsedTime);
+    }
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", allottedTime=" + estimatedTime +
+                ", elapsedTime=" + elapsedTime +
+                '}';
+    }
 }
 
