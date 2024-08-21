@@ -12,5 +12,10 @@
     <string name="night_mode_off">Never use Night/Dark Mode</string>
     <string name="night_mode_on">Use Night/Dark Mode (unless disabled in OS Settings)</string>
     <string name="add_task">Add Task</string>
+    <string name="about">About</string>
+    <string name="about_message">Android App to Track Tasks.
+        \n\nOriginal Java Console version by Elisheva Malitzky and Sara Bleier.
+        \n\nThanks to Professor Abrahamson (and GAI).
+        \n\nGood luck with all your work!!</string>
 
 </resources>

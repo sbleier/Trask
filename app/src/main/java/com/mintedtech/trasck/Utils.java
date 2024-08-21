@@ -43,6 +43,7 @@ public class Utils
      */
     public static void showInfoDialog (Context context, String strTitle, String strMsg)
     {
+
         // create the listener for the dialog
         final DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener ()
         {
@@ -67,6 +68,14 @@ public class Utils
         // Create and Show the Dialog
         alertDialogBuilder.show ();
     }
+
+    public static void showInfoDialog (Context context, int titleID, int msgID)
+    {
+        showInfoDialog (context, context.getString (titleID), context.getString (msgID));
+    }
+
+
+
 
 
 }

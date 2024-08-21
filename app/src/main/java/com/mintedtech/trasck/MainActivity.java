@@ -175,8 +175,32 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
-
+        if (id == R.id.action_about) {
+            showAbout();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            taskList = savedInstanceState.getParcelableArrayList("LIST");
+            if (taskList != null) {
+                adapter.submitList(new ArrayList<>(taskList)); // Notify adapter of restored data
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reapply settings or refresh UI if necessary
+        adapter.notifyDataSetChanged(); // Refresh the list in case of setting change
+    }
+
+    private void showAbout() {
+        Utils.showInfoDialog(this, R.string.app_name, R.string.about_message);
     }
 
 
