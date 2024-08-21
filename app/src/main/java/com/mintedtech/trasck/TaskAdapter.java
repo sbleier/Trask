@@ -49,7 +49,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
         }
 
         long timeRemaining = task.getEstimatedTime() - task.getElapsedTime();
-        holder.timeRemaining.setText("Time Remaining: " + formatDuration(timeRemaining));
+        holder.timeRemaining.setText(formatDuration(timeRemaining));
 
 
         holder.itemView.setOnClickListener(v -> handleClick(task, position));
