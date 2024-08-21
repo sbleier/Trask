@@ -1,6 +1,7 @@
 package com.mintedtech.trasck;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +34,23 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = getItem(position); // Use getItem() instead of taskList.get()holder.taskTitle.setText(task.getTitle());
+        Log.d("TaskAdapter", "Title: " + task.getTitle());  // Log to check data
+
         holder.taskTitle.setText(task.getTitle());
         holder.taskDescription.setText(task.getDescription());
 
         holder.estimatedTime.setText(formatDuration(task.getEstimatedTime()));
+
+        long elapsedTime = task.getElapsedTime();
+        if (elapsedTime == 0) {
+            holder.elapsedTime.setText("00:00:00");
+        } else {
+            holder.elapsedTime.setText(formatDuration(elapsedTime));
+        }
+
+        long timeRemaining = task.getEstimatedTime() - task.getElapsedTime();
+        holder.timeRemaining.setText("Time Remaining: " + formatDuration(timeRemaining));
+
 
         holder.itemView.setOnClickListener(v -> handleClick(task, position));
     }
@@ -74,7 +88,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView taskTitle, taskDescription, estimatedTime, elapsedTime;
+        TextView taskTitle, taskDescription, estimatedTime, elapsedTime, timeRemaining;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -82,6 +96,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
             taskDescription = itemView.findViewById(R.id.taskDescription);
             estimatedTime = itemView.findViewById(R.id.estimatedTime);
             elapsedTime = itemView.findViewById(R.id.tv_seconds_elapsed);
+            timeRemaining = itemView.findViewById(R.id.tv_remaining_time);
         }
     }
 }

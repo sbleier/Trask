@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -17,6 +19,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings_activity);
         attachFragment(savedInstanceState);
         setupActionBar();
+        setupBackArrow();
+
     }
 
     private void attachFragment(Bundle savedInstanceState) {
@@ -28,6 +32,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+
+private void setupBackArrow() {
+    FloatingActionButton backArrow = findViewById(R.id.backArrow);
+    backArrow.setOnClickListener(view -> onBackPressed());
+}
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -38,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
             return true;
         } else {
             return super.onOptionsItemSelected(item);

@@ -43,7 +43,7 @@ public class TaskActivity extends AppCompatActivity {
 
 
         setSupportActionBar(binding.toolbar);
-        setupBackArrow();
+
 
         binding.fab.setOnClickListener(view -> {
             getTimeFromInput();
@@ -58,6 +58,8 @@ public class TaskActivity extends AppCompatActivity {
         Button submitTaskButton = findViewById(R.id.submitTaskButton);
         submitTaskButton.setOnClickListener(view -> submitTask());
 
+
+
         Intent incomingData = getIntent();
         editPosition = incomingData.getIntExtra("edit_task_position", -1);
         isEditMode = editPosition >-1;
@@ -67,17 +69,31 @@ public class TaskActivity extends AppCompatActivity {
             binding.contentTask.taskTitle.setText(currentTask.getTitle().toString());
             binding.contentTask.taskDescription.setText(currentTask.getDescription().toString());
             //TODO: Adjust number formats for these two items following
-            binding.contentTask.estimatedTime.setText(Long.toString(currentTask.getEstimatedTime()));
-            binding.contentTask.tvSecondsElapsed.setText(Long.toString(currentTask.getElapsedTime()));
+            binding.contentTask.estimatedTime.setText(formatDuration(currentTask.getEstimatedTime()));
+            binding.contentTask.tvSecondsElapsed.setText(formatDuration(currentTask.getElapsedTime()));
+            Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
+            deleteTaskButton.setOnClickListener(view -> {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("delete_position", editPosition);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
 
+        }else{
+            deleteTask();
         }
 
+    }
+
+    private void deleteTask() {
+        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
+        deleteTaskButton.setOnClickListener(view -> onBackPressed());
     }
 
     private void submitTask() {
         // Retrieve input values
         try {
-            TextInputEditText taskTitleInput =  binding.contentTask.taskTitle;
+            TextInputEditText taskTitleInput = binding.contentTask.taskTitle;
             String taskTitle = taskTitleInput.getText().toString();
 
             TextInputEditText taskDescriptionInput = binding.contentTask.taskDescription;
@@ -103,10 +119,11 @@ public class TaskActivity extends AppCompatActivity {
             e.getMessage();
         }
 
-
     }
 
-    private long parseTimeFromString(String timeInput) {
+
+
+        private long parseTimeFromString(String timeInput) {
         // Expected format: HH:MM:SS
         String[] timeParts = timeInput.split(":");
         if (timeParts.length == 3) {
@@ -123,10 +140,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    private void setupBackArrow() {
-        FloatingActionButton backArrow = findViewById(R.id.backArrow);
-        backArrow.setOnClickListener(view -> onBackPressed());
-    }
+
 
     private void setupTimer() {
         // Create the Handler object

@@ -9,24 +9,71 @@
         android:id="@+id/taskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/taskDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItemSecondary" />
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
+    <TextView
+        android:id="@+id/estimatedTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Estimated Time Required:"
+        android:textStyle="bold"
+        android:paddingTop="8dp"/>
+    <!-- Estimated Time -->
     <TextView
         android:id="@+id/estimatedTime"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItemSecondary" />
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"/>
 
     <TextView
-        android:id="@+id/elapsedTime"
+        android:id="@+id/timeWorkedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItemSecondary" />
+        android:text="Time You've Worked:"
+        android:textStyle="bold"
+        android:paddingTop="8dp"/>
+    <!-- Elapsed Time -->
+    <TextView
+        android:id="@+id/tv_seconds_elapsed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+
+    <TextView
+        android:id="@+id/timeRemaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
+        android:text="Time Remaining:"
+        android:paddingTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_remaining_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItemSecondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
 
 </LinearLayout>

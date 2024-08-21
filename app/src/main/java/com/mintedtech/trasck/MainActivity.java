@@ -3,6 +3,8 @@ package com.mintedtech.trasck;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -78,28 +81,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
-            // Retrieve the task data from the intent
-            Task newTask = data.getParcelableExtra("new_task");
-            if (newTask != null) {
-
-                if (requestCode == 1) { //add
-                    taskList.add(newTask);
-
-                    adapter.submitList(taskList); // Notify adapter of new data
-                    adapter.notifyItemInserted(taskList.size() - 1);
-                } else if (requestCode == 2) { //edit
-                    int position = data.getIntExtra("edit_position", -1);
-                    if (position !=-1) {
-                        taskList.remove(position);
-                        taskList.add(position, newTask);
+            if (data.hasExtra("delete_position")) { // Handle task deletion
+                int positionToDelete = data.getIntExtra("delete_position", -1);
+                if (positionToDelete != -1) {
+                    if (positionToDelete >= 0 && positionToDelete < taskList.size()) {
+                        taskList.remove(positionToDelete);
                         adapter.submitList(taskList); // Notify adapter of new data
-                        adapter.notifyItemChanged(position);
+                        adapter.notifyItemRemoved(positionToDelete);
+
+                        // Update positions of remaining items if needed
+                        for (int i = positionToDelete; i < taskList.size(); i++) {
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+                }
+            } else {
+                // Retrieve the task data from the intent
+                Task newTask = data.getParcelableExtra("new_task");
+                if (newTask != null) {
+
+                    if (requestCode == 1) { //add
+                        taskList.add(newTask);
+
+                        adapter.submitList(taskList); // Notify adapter of new data
+                        adapter.notifyItemInserted(taskList.size() - 1);
+                    } else if (requestCode == 2) { //edit
+                        int position = data.getIntExtra("edit_position", -1);
+                        if (position != -1) {
+                            taskList.remove(position);
+                            taskList.add(position, newTask);
+                            adapter.submitList(taskList); // Notify adapter of new data
+                            adapter.notifyItemChanged(position);
+                        }
                     }
                 }
             }
-
         }
     }
+
 
     private long convertTimeToSeconds(String timeInput) {
         // Expected format: HH:MM:SS
@@ -124,12 +143,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void addDummyTasks() {
-//        // Adding dummy tasks for demonstration
-//        taskList.add(new Task("Task 1", "Description for Task 1", 3));
-//        taskList.add(new Task("Task 2", "Description for Task 2", 3));
-//        adapter.notifyDataSetChanged();
-//    }
 
     private void setContentView() {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -165,5 +178,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
 }

@@ -16,6 +16,7 @@ public class Task implements Parcelable {
         this.description = description;
         this.estimatedTime = estimatedTime;
         this.elapsedTime = elapsedTime;
+
     }
 
     protected Task(Parcel in) {
