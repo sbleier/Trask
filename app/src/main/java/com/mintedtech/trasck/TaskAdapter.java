@@ -67,11 +67,11 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
 
 
     private String formatDuration(long seconds) {
-            long hours = seconds / 3600;
-            long minutes = (seconds % 3600) / 60;
-            long secs = seconds % 60;
-            return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, secs);
-        }
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, secs);
+    }
 
 
     // Define a DiffUtil.ItemCallback for Task objects

@@ -74,8 +74,4 @@ public class Utils
         showInfoDialog (context, context.getString (titleID), context.getString (msgID));
     }
 
-
-
-
-
 }

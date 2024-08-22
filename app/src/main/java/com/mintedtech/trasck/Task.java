@@ -120,4 +120,3 @@ public class Task implements Parcelable {
                 '}';
     }
 }
-

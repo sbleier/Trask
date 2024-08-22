@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 
@@ -37,10 +38,8 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityTaskBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
         setSupportActionBar(binding.toolbar);
 
@@ -64,14 +63,16 @@ public class TaskActivity extends AppCompatActivity {
         editPosition = incomingData.getIntExtra("edit_task_position", -1);
         isEditMode = editPosition >-1;
 
+        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
         if (isEditMode) {
             Task currentTask = incomingData.getParcelableExtra("current_task");
             binding.contentTask.taskTitle.setText(currentTask.getTitle().toString());
             binding.contentTask.taskDescription.setText(currentTask.getDescription().toString());
-            //TODO: Adjust number formats for these two items following
             binding.contentTask.estimatedTime.setText(formatDuration(currentTask.getEstimatedTime()));
+            mSecondsElapsed = incomingData.getLongExtra("elapsed_time", 0);  // Set elapsed time
             binding.contentTask.tvSecondsElapsed.setText(formatDuration(currentTask.getElapsedTime()));
-            Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
+
+            deleteTaskButton.setVisibility(View.VISIBLE);
             deleteTaskButton.setOnClickListener(view -> {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("delete_position", editPosition);
@@ -80,15 +81,16 @@ public class TaskActivity extends AppCompatActivity {
             });
 
         }else{
-            deleteTask();
+//            deleteTask();
+            deleteTaskButton.setVisibility(View.GONE);
         }
 
     }
 
-    private void deleteTask() {
-        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
-        deleteTaskButton.setOnClickListener(view -> onBackPressed());
-    }
+//    private void deleteTask() {
+//        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
+//        deleteTaskButton.setOnClickListener(view -> finish());
+//    }
 
     private void submitTask() {
         // Retrieve input values
@@ -125,7 +127,7 @@ public class TaskActivity extends AppCompatActivity {
 
 
 
-        private long parseTimeFromString(String timeInput) {
+    private long parseTimeFromString(String timeInput) {
         // Expected format: HH:MM:SS
         String[] timeParts = timeInput.split(":");
         if (timeParts.length == 3) {
@@ -305,5 +307,3 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 }
-
-

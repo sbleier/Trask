@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, TaskActivity.class);
         intent.putExtra("edit_task_position", position);
         intent.putExtra("current_task", task);
+        intent.putExtra("elapsed_time", task.getElapsedTime());  // Pass the elapsed time
         startActivityForResult(intent, 2);
     }
 

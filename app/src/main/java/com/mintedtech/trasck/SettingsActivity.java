@@ -33,10 +33,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-private void setupBackArrow() {
-    FloatingActionButton backArrow = findViewById(R.id.backArrow);
-    backArrow.setOnClickListener(view -> onBackPressed());
-}
+    private void setupBackArrow() {
+        FloatingActionButton backArrow = findViewById(R.id.backArrow);
+        backArrow.setOnClickListener(view -> onBackPressed());
+    }
 
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();

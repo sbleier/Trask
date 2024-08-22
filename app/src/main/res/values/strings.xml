@@ -17,5 +17,11 @@
         \n\nOriginal Java Console version by Elisheva Malitzky and Sara Bleier.
         \n\nThanks to Professor Abrahamson (and GAI).
         \n\nGood luck with all your work!!</string>
+    <string name="task">Task</string>
+    <string name="taskInput">Task:</string>
+    <string name="description">Description:</string>
+    <string name="estimated_time">Estimated Time:</string>
+    <string name="done">Done</string>
+    <string name="delete">Delete</string>
 
 </resources>
