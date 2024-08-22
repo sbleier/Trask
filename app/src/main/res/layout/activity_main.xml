@@ -7,6 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <include
+        android:id="@+id/content_main"
+        layout="@layout/content_main" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +41,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:text="@string/add_task"
         android:textColor="?attr/colorOnPrimaryContainer"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:icon="@android:drawable/ic_input_add"
         app:iconTint="?attr/colorOnPrimaryContainer"
         app:layout_anchor="@id/taskRecyclerView"

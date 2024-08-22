@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/fab_margin"
         android:text="My Tasks:"
-        android:textSize="24sp"
+        android:textSize="29sp"
+        android:layout_marginTop="-10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
