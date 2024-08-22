@@ -58,21 +58,26 @@ public class TaskActivity extends AppCompatActivity {
         submitTaskButton.setOnClickListener(view -> submitTask());
 
 
-
         Intent incomingData = getIntent();
         editPosition = incomingData.getIntExtra("edit_task_position", -1);
-        isEditMode = editPosition >-1;
+        isEditMode = editPosition > -1;
 
-        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
         if (isEditMode) {
             Task currentTask = incomingData.getParcelableExtra("current_task");
             binding.contentTask.taskTitle.setText(currentTask.getTitle().toString());
             binding.contentTask.taskDescription.setText(currentTask.getDescription().toString());
             binding.contentTask.estimatedTime.setText(formatDuration(currentTask.getEstimatedTime()));
-            mSecondsElapsed = incomingData.getLongExtra("elapsed_time", 0);  // Set elapsed time
-            binding.contentTask.tvSecondsElapsed.setText(formatDuration(currentTask.getElapsedTime()));
 
-            deleteTaskButton.setVisibility(View.VISIBLE);
+            // Set the elapsed time and estimated time for the task
+            mSecondsElapsed = incomingData.getLongExtra("elapsed_time", 0);
+            binding.contentTask.tvSecondsElapsed.setText(formatDuration(mSecondsElapsed));
+
+            estimatedTime = currentTask.getEstimatedTime(); // Assuming you have an estimatedTime variable
+
+            // Update the TextView with the new values
+            updateTextView();
+
+            Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
             deleteTaskButton.setOnClickListener(view -> {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("delete_position", editPosition);
@@ -80,17 +85,16 @@ public class TaskActivity extends AppCompatActivity {
                 finish();
             });
 
-        }else{
-//            deleteTask();
-            deleteTaskButton.setVisibility(View.GONE);
+        } else {
+            deleteTask();
         }
 
     }
 
-//    private void deleteTask() {
-//        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
-//        deleteTaskButton.setOnClickListener(view -> finish());
-//    }
+    private void deleteTask() {
+        Button deleteTaskButton = findViewById(R.id.deleteTaskButton);
+        deleteTaskButton.setOnClickListener(view -> onBackPressed());
+    }
 
     private void submitTask() {
         // Retrieve input values
@@ -111,7 +115,6 @@ public class TaskActivity extends AppCompatActivity {
             long elapsedTime = parseTimeFromString(ellapsedTimeString); //TODO
 
 
-
             Task newTask = new Task(taskTitle, taskDescription, estTime, elapsedTime);
             Intent resultIntent = new Intent();
             resultIntent.putExtra("new_task", newTask);
@@ -124,7 +127,6 @@ public class TaskActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     private long parseTimeFromString(String timeInput) {
@@ -142,8 +144,6 @@ public class TaskActivity extends AppCompatActivity {
         }
         return 0; // Default to 0 if parsing fails
     }
-
-
 
 
     private void setupTimer() {
