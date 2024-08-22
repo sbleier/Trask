@@ -108,6 +108,8 @@ public class TaskActivity extends AppCompatActivity {
 
             long elapsedTime = parseTimeFromString(ellapsedTimeString); //TODO
 
+
+
             Task newTask = new Task(taskTitle, taskDescription, estTime, elapsedTime);
             Intent resultIntent = new Intent();
             resultIntent.putExtra("new_task", newTask);

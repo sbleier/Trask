@@ -10,12 +10,16 @@ public class Task implements Parcelable {
     private String description;
     private long estimatedTime;
     private long elapsedTime;
+    private long remainingTime;
 
     public Task(String title, String description, long estimatedTime, long elapsedTime) {
         this.title = title;
         this.description = description;
         this.estimatedTime = estimatedTime;
         this.elapsedTime = elapsedTime;
+        remainingTime = estimatedTime - elapsedTime;
+
+
 
     }
 
@@ -24,6 +28,7 @@ public class Task implements Parcelable {
         description = in.readString();
         estimatedTime = in.readLong();
         elapsedTime = in.readLong();
+        remainingTime = in.readLong();
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -49,6 +54,7 @@ public class Task implements Parcelable {
         parcel.writeString(description);
         parcel.writeLong(estimatedTime);
         parcel.writeLong(elapsedTime);
+        parcel.writeLong(remainingTime);
     }
 
     public void setTitle(String title) {
@@ -67,6 +73,10 @@ public class Task implements Parcelable {
         this.elapsedTime = elapsedTime;
     }
 
+    public void setRemainingTime(long remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -81,6 +91,10 @@ public class Task implements Parcelable {
 
     public long getElapsedTime() {
         return elapsedTime;
+    }
+
+    public long getRemainingTime() {
+        return remainingTime;
     }
 
     @Override

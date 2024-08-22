@@ -48,8 +48,12 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
             holder.elapsedTime.setText(formatDuration(elapsedTime));
         }
 
-        long timeRemaining = task.getEstimatedTime() - task.getElapsedTime();
-        holder.timeRemaining.setText(formatDuration(timeRemaining));
+        long remainingTime = task.getEstimatedTime() - task.getElapsedTime();
+        if (remainingTime <= 0) {
+            holder.remainingTime.setText("Congratulation! You've reached your goal!");
+        } else {
+            holder.remainingTime.setText(formatDuration(remainingTime));
+        }
 
 
         holder.itemView.setOnClickListener(v -> handleClick(task, position));
@@ -88,7 +92,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView taskTitle, taskDescription, estimatedTime, elapsedTime, timeRemaining;
+        TextView taskTitle, taskDescription, estimatedTime, elapsedTime, remainingTime;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,7 +100,7 @@ public class TaskAdapter extends ListAdapter<Task, TaskAdapter.TaskViewHolder> {
             taskDescription = itemView.findViewById(R.id.taskDescription);
             estimatedTime = itemView.findViewById(R.id.estimatedTime);
             elapsedTime = itemView.findViewById(R.id.tv_seconds_elapsed);
-            timeRemaining = itemView.findViewById(R.id.tv_remaining_time);
+            remainingTime = itemView.findViewById(R.id.tv_remaining_time);
         }
     }
 }
