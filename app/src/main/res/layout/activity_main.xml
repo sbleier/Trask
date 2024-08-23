@@ -23,13 +23,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/taskRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/_642dp"
         android:layout_gravity="top|center_horizontal"
         android:layout_margin="@dimen/fab_margin"
+        android:paddingTop="@dimen/_35dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

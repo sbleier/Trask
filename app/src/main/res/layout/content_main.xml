@@ -10,16 +10,14 @@
         android:id="@+id/task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:padding="@dimen/fab_margin"
         android:text="My Tasks:"
-        android:textSize="29sp"
-        android:layout_marginTop="-10dp"
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:textSize="27sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
